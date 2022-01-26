@@ -1,17 +1,23 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route} from 'react-router-dom';
 import Header from './components/Header';
+import Home from './components/Home';
 
 const App = () => {
   return (
-    <div className="ui container">
-      <BrowserRouter>
+    <BrowserRouter>
+      <div>
         <div>
           <Header />
-          {/* <Route path="/" exact component={} /> */}
         </div>
-      </BrowserRouter>
-    </div>
+        <div>
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<p>ligma balls</p>}/>
+          </Routes>
+        </div>
+      </div>
+    </BrowserRouter>
   );
 };
 
