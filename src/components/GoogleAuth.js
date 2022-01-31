@@ -2,16 +2,19 @@ import React, { useEffect } from "react";
 import clientId from "../config/GoogleClientId";
 import GoogleLogin from 'react-google-login';
 
-// oauth with google works
 async function onSuccess(user) {
     console.log(user, "lets goooo");
-
-    fetch("/api/auth/login", {
+    fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(user)
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.tokenId}`
+        },
+        body: JSON.stringify(user),
     }).then(res => console.log(res));
 }
+
+
 
 function GoogleAuth() {
     return (
@@ -21,6 +24,9 @@ function GoogleAuth() {
             onSuccess={async (user) => onSuccess(user)}
             onFailure={(user) => console.log("TODO: oAuth failure", user)}
             cookiePolicy={'single_host_origin'}
+            redirectUri="localhost:3000/"
+            hostedDomain="vt.edu"
+            uxMode="popup"
         />
     );
 }
