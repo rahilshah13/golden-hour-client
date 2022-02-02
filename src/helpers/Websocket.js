@@ -1,26 +1,32 @@
-// Create WebSocket connection.
+import { io } from "socket.io-client";
 // todo: wss for https
-const socket = new WebSocket('ws://localhost:4000/ws/auth?token=blahblah');
+var socket = null;
 
-// Connection opened
-socket.addEventListener('open', function (event) {
-    socket.send('Hello Server!');
-});
+function createWebsocket() {
+    socket = new io(process.env.WS_SERVER_URL || 'ws://localhost:4000/ws/', { auth: {token: localStorage.getItem("token")} });
 
-// Listen for messages
-// socket.addEventListener('message', async message => {
-//     console.log('Message from server ', message);
-//     if (message.answer) {
-//         const remoteDesc = new RTCSessionDescription(message.answer);
-//         await peerConnection.setRemoteDescription(remoteDesc);
-//     } else if(message.offer) {
-//         peerConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
-//         const answer = await peerConnection.createAnswer();
-//         await peerConnection.setLocalDescription(answer);
-//         socket.send({'answer': answer});
-//     }
-// });
+    socket.on("connect", () => {
+        // we want to ask the server for the state of the "Event"
+        console.log(socket.connected); // true
+    });
+    
+    socket.on("event_state", (state) => {
+        // we want to ask the server for the state of the "Event"
+        console.log("New State: ", state); // true
+    });
+    
+    socket.on("queued_match", (match) => {
+        // we want to ask the server for a new peer to connect to
+        console.log("New match: ", match); // true
+    });
+}
+
+
+
+
+
 
 export {
+    createWebsocket,
     socket
 }

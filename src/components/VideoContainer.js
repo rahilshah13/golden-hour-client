@@ -8,7 +8,7 @@ function VideoContainer({match}) {
     return (
         <div className="card">
             <h3>{match}</h3>
-            <video id={`video-${match}`} autoPlay playsInline controls={false}/>
+            <video className="cardContent" id={`video-${match}`} autoPlay playsInline controls={false}/>
         </div>
     );
 }

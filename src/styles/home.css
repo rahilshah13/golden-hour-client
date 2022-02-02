@@ -1,0 +1,12 @@
+.oAuthButtonContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid red; */
+    width:100%;
+    height: 80vh;
+}
+.oAuthButton {
+}

@@ -1,10 +1,19 @@
-import React from 'react';
-
+import React, {useState, useEffect} from 'react';
+import GoogleAuth from './GoogleAuth';
+import Lobby from './Lobby';
 const Home = () => {
+
+    const [isAuthenticated, setAuth] = useState(false);
+
     return (
-        <div>
-            HOME - LETS GO!
-        </div>
+        isAuthenticated 
+        ? 
+            <Lobby />
+        :
+            <div className='oAuthButtonContainer'> 
+                <GoogleAuth setAuth={setAuth} /> 
+                <p>sign in with vt email</p>
+            </div>
     );
 }
 

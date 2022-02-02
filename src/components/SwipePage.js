@@ -45,6 +45,8 @@ function SwipePage() {
         updateCameraList(videoCameras);
     }, []);
 
+
+    // TODO: ONLY CALL PLAYVIDEO ONSWIPE
     return (
         <div className="cardContainer">
             { db.map((match, index) => {
