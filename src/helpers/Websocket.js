@@ -4,11 +4,8 @@ var socket = null;
 
 function createWebsocket(setCount) {
     socket = new io(process.env.WS_SERVER_URL || 'ws://localhost:4000/', { auth: {token: localStorage.getItem("token"), } });
-    // socket.onAny((event, ...args) => {
-    //     console.log(event, args);
-    //     console.log("shit")
-    // });
 
+    // TODO: this isn't triggered the first time 
     socket.on("connection", (n) => {
         // we want to ask the server for the state of the "Event"
         console.log("whoaaaaa");

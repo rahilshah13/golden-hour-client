@@ -6,15 +6,17 @@ import SwipePage from './components/SwipePage';
 
 const App = () => {
 
+  const [isAuthenticated, setAuth] = useState(false);
+
   return (
     <BrowserRouter>
       <div>
         <div>
-          <Header />
+          <Header isAuthenticated={isAuthenticated} />
         </div>
         <div>
           <Routes>
-            <Route path="/" element={ <Home /> }/>
+            <Route path="/" element={ <Home isAuthenticated={isAuthenticated} setAuth={setAuth} /> }/>
           </Routes>
         </div>
       </div>

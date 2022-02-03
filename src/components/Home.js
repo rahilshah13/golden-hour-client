@@ -1,9 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import GoogleAuth from './GoogleAuth';
 import Lobby from './Lobby';
-const Home = () => {
-
-    const [isAuthenticated, setAuth] = useState(false);
+const Home = ({isAuthenticated, setAuth}) => {
 
     return (
         isAuthenticated 
