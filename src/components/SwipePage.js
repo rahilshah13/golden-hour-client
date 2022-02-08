@@ -42,10 +42,10 @@ function SwipePage() {
 
     useEffect(async () => {
         const videoCameras = await getConnectedDevices('videoinput');
+        console.log("video cam list updated")
         updateCameraList(videoCameras);
     }, []);
-
-
+    
     // TODO: ONLY CALL PLAYVIDEO ONSWIPE
     return (
         <div className="cardContainer">

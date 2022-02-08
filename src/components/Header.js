@@ -1,11 +1,16 @@
 import React from 'react';
 import '../App.css';
+import { socket } from '../helpers/Websocket';
 
-const handleLogout = () => {
+function handleLogout(setAuth) {
+    // clear cookies
+    setAuth(false);
     console.log("LOGOUT!");
+    socket.emit("logout", "hello");  
+    socket.disconnect();
 }
 
-const Header = ({isAuthenticated}) => {
+const Header = ({isAuthenticated, setAuth}) => {
     
     const style = { marginLeft: 'auto', 
                     marginRight: '0', 
@@ -18,7 +23,7 @@ const Header = ({isAuthenticated}) => {
     return (
         <div style={style}>
             <p> golden hour </p>
-            { isAuthenticated ? <p onClick={handleLogout}> logout </p> : null }
+            { isAuthenticated ? <a href="/" onClick={() => handleLogout(setAuth)}> logout </a> : null }
         </div>
     );
 }

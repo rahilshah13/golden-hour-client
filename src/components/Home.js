@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import GoogleAuth from './GoogleAuth';
-import Lobby from './Lobby';
+import Lobby from './Lobby/Lobby';
 const Home = ({isAuthenticated, setAuth}) => {
 
     return (

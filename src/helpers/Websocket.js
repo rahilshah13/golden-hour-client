@@ -1,35 +1,32 @@
 import { io } from "socket.io-client";
 // todo: wss for https
-var socket = null;
+const socket = new io(process.env.WS_SERVER_URL || 'ws://localhost:4000/', { auth: {token: localStorage.getItem("token")}, autoConnect: false});
 
-function createWebsocket(setCount) {
-    socket = new io(process.env.WS_SERVER_URL || 'ws://localhost:4000/', { auth: {token: localStorage.getItem("token"), } });
+socket.on("connection", (n) => {
+    console.log("num connected: ", n); // true
+});
 
-    // TODO: this isn't triggered the first time 
-    socket.on("connection", (n) => {
-        // we want to ask the server for the state of the "Event"
-        console.log("whoaaaaa");
-        console.log("num connected: ", n); // true
-        setCount(n);
-    });
-    
-    socket.on("event_state", (state) => {
-        // we want to ask the server for the state of the "Event"
-        console.log("New State: ", state); // true
-    });
-    
-    socket.on("queued_match", (match) => {
-        // we want to ask the server for a new peer to connect to
-        console.log("New match: ", match); // true
-    });
-}
+socket.on("event_state", (state) => {
+    // we want to ask the server for the state of the "Event"
+    console.log("New State: ", state); // true
+});
 
 
+socket.on("ready_state", (state) => {
+    // we want to ask the server for the state of the "Event"
+    console.log("New State: ", state); // true
+});
 
+socket.on("queued_match", (match) => {
+    // we want to ask the server for a new peer to connect to
+    console.log("New match: ", match); // true
+});
 
+socket.on("logout", (idk) => {
+    console.log("idkkkk");
+});
 
 
 export {
-    createWebsocket,
     socket
 }

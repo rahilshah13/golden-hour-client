@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import { BrowserRouter, Routes, Route, Redirect} from 'react-router-dom';
 import Header from './components/Header';
 import Home from './components/Home';
-import SwipePage from './components/SwipePage';
 
 const App = () => {
 
@@ -12,7 +11,7 @@ const App = () => {
     <BrowserRouter>
       <div>
         <div>
-          <Header isAuthenticated={isAuthenticated} />
+          <Header isAuthenticated={isAuthenticated}  setAuth={setAuth} />
         </div>
         <div>
           <Routes>
