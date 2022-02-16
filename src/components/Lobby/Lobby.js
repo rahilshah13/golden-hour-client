@@ -42,7 +42,7 @@ function Lobby({user, setUser}) {
 
     if(event.ready && user.ready)
             return ( 
-                <div className='lobbyContainer'>
+                <div className='swipeContainer'>
                     <SwipePage /> 
                     <button onClick={handleDebugToggleButton}> toggle pages [DEBUG] </button>
                 </div>
@@ -50,18 +50,23 @@ function Lobby({user, setUser}) {
     else {
         return ( 
             <div className='lobbyContainer'>
-                <p><FaHourglassHalf /> {now - tempDate}</p>
-                <p><FaUsers /> {event.nUsers}</p>
+                <div className="timerAndCounter">
+                    <div><FaHourglassHalf /> {now - tempDate} </div>
+                    <div><FaUsers /> {event.nUsers}</div>
+                </div>
                 
                 <GenderSlider user={user} setUser={setUser} anchorEl={genderEl} setAnchorEl={setGenderEl}/>
-                <LabelButton onClick={handleGenderPopover} text={getGenderLabel(user.gender)} />
+                <LabelButton onClick={handleGenderPopover} text={getGenderLabel(user.gender)} val={user.gender} mode="g"/>
 
                 <PreferenceSlider setUser={setUser} user={user} anchorEl={prefEl} setAnchorEl={setPrefEl}/>
-                <LabelButton onClick={handlePrefPopover} text={getPrefLabel(user.preference)} />
-
+                <LabelButton onClick={handlePrefPopover} text={getPrefLabel(user.preference)} val={user.preference} mode="p" />
                 <WavelengthField user={user} setUser={setUser}/>
-                <button onClick={handleReadyButton}>ready</button>
-                <button onClick={handleDebugToggleButton}> toggle pages [DEBUG] </button>
+                <div style={{margin: "5%"}}>
+                    <button onClick={handleReadyButton}>ready</button>
+                </div>
+                <div style={{margin: "5%"}}>
+                    <button onClick={handleDebugToggleButton}> toggle pages [DEBUG] </button>
+                </div>
             </div>
         );
     }

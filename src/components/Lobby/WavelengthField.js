@@ -43,7 +43,7 @@ function WavelengthField({user, setUser}) {
     };
 
     return (
-        <div style={{margin: "10%"}}>
+        <div style={{margin: "5%"}}>
             <TextField
                 error={error === 'valid' ? false : true}
                 id="my-wavelength"
@@ -55,9 +55,13 @@ function WavelengthField({user, setUser}) {
                 onChange={handleChange}
                 InputProps={{
                     startAdornment: 
-                        <div style={{marginRight: "5%"}}><FaWaveSquare /></div>,
+                        <div style={{marginRight: "5%"}}>
+                            <FaWaveSquare />
+                        </div>,
                     endAdornment: 
-                        <div style={{marginLeft: "5%"}}><FaInfoCircle /></div>
+                        <div style={{marginLeft: "5%"}}>
+                            <FaInfoCircle />
+                        </div>
                 }}
             />
         </div>

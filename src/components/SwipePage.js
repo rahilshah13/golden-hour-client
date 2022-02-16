@@ -3,7 +3,7 @@ import {updateCameraList, getConnectedDevices, playVideoFromCamera}  from '../he
 import TinderCard from 'react-tinder-card'
 import VideoContainer from "./VideoContainer";
 import WsExample from "./WsExample";
-const db = ["joe mama", "ligma balls", "poopma pants"];
+const db = ["joemama", "ligmaballs", "poopmapants"];
 
 function SwipePage() {
 

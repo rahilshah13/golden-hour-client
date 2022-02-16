@@ -29,9 +29,9 @@ async function playVideoFromCamera(matchId) {
     try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         const videoElement = document.getElementById(`video-${matchId}`);
-        console.log(videoElement);
         videoElement.srcObject = stream;
     } catch(error) {
+        // TODO: HANDLE NO video camera or mic found
         console.error('Error opening video camera.', error);
     }
 }

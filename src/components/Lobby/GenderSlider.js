@@ -30,7 +30,8 @@ function GenderSlider({setUser, user, anchorEl, setAnchorEl}) {
     };
 
     return (
-        <Popover 
+        <Popover
+            style={{background: "rgba(0,0,0,0)"}} 
             anchorOrigin={{vertical: 'top', horizontal: 'center'}}
             transformOrigin={{vertical: 'bottom', horizontal: 'center'}}
             id={Boolean(anchorEl) ? "genderPopover": undefined}
@@ -38,10 +39,9 @@ function GenderSlider({setUser, user, anchorEl, setAnchorEl}) {
             anchorEl={anchorEl}
             onClose={handleClose}
         >
-            <div style={{width: "70vw", background: "none"}}>
                 <Slider
+                    sx={{ width: "80vw", background: "rgba(0,0,0,0.0)"}}
                     track={false}
-                    aria-labelledby="track-false-slider"
                     defaultValue={.5}
                     min={0}
                     max={1}
@@ -49,10 +49,8 @@ function GenderSlider({setUser, user, anchorEl, setAnchorEl}) {
                     value={user.gender}
                     onChange={handleChange}
                     marks={marks}
-                    color="primary"
                     valueLabelFormat={getGender}
                 />
-            </div>
         </Popover>
     )
 }

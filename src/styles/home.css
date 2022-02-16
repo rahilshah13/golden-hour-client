@@ -10,3 +10,12 @@
 }
 .oAuthButton {
 }
+
+.gradient {
+    margin-top: 90vh;
+    position: absolute;
+    /* font-size: 1em;
+    background: -webkit-linear-gradient(#79081c, #ff9e01);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; */
+}

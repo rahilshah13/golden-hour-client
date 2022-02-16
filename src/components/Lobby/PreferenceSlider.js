@@ -8,15 +8,15 @@ const minDistance = .1;
 
 function getPrefLabel(vals) {
     if (!Array.isArray(vals))
-        return "I'd like to match with folks";
+        return "match me with folks";
     
     if (vals[0] <= NON_BINARY_RANGE && vals[1] <= NON_BINARY_RANGE)
-        return "I'd like to match with men"
+        return "match me with men"
 
     if (vals[0] > 2*NON_BINARY_RANGE && vals[1] > 2*NON_BINARY_RANGE)
-        return "I'd like to match with women"
+        return "match me with women"
 
-    return "I'd like to match with folks";
+    return "match me with folks";
 }
 
 const marks = [
@@ -59,8 +59,8 @@ function PreferenceSlider({user, setUser, anchorEl, setAnchorEl}) {
             anchorEl={anchorEl}
             onClose={handleClose}
         >   
-            <div style={{width: "70vw", background: "none", height: "100%", border: "1px solid red", margin: "10%"}}>
-                <Slider
+            <Slider
+                    sx={{ width: "80vw", marginTop: "3.5vh", background: "rgba(0,0,0,0.0)"}}
                     getAriaLabel={() => 'Minimum distance shift'}
                     min={0}
                     max={1}
@@ -72,8 +72,7 @@ function PreferenceSlider({user, setUser, anchorEl, setAnchorEl}) {
                     getAriaValueText={getGender}
                     marks={marks}
                     disableSwap
-                />
-            </div>
+            />
         </Popover>
     );
 }

@@ -3,7 +3,10 @@ import {playVideoFromCamera}  from '../helpers/WebRTC';
 
 function VideoContainer({match}) {
 
-    playVideoFromCamera(match);
+    useEffect(() => {
+        console.log('greetings', match);
+        playVideoFromCamera(match)
+    }, []);
 
     return (
         <div className="card">
