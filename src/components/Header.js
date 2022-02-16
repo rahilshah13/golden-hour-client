@@ -23,7 +23,7 @@ const Header = ({isAuthenticated, setAuth}) => {
     return (
         <div style={style}>
             <p> golden hour </p>
-            { isAuthenticated ? <a href="/" onClick={() => handleLogout(setAuth)}> logout </a> : null }
+            { isAuthenticated ? <p href="/" onClick={() => handleLogout(setAuth)}> logout </p> : null }
         </div>
     );
 }

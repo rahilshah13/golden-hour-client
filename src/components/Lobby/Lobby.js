@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import SwipePage from '../SwipePage';
 import { socket } from '../../helpers/Websocket';
-import { FaHourglassHalf, FaUser } from "react-icons/fa";
+import { FaHourglassHalf, FaUsers } from "react-icons/fa";
 import { GenderSlider, getGenderLabel } from './GenderSlider';
 import { PreferenceSlider, getPrefLabel } from './PreferenceSlider';
 import { WavelengthField } from './WavelengthField';
@@ -15,10 +15,9 @@ function handleReadyButton() {
 
 const popOverButtonStyle = {"background": "none", "border": "none"};
 
-function Lobby() {
+function Lobby({user, setUser}) {
     // not_started, started
     const [event, setEvent] = useState({ ready: false, start: Date.now(), end: 6969, nUsers: 1});
-    const [user, setUser] = useState({ ready: false, gender: .5, preference: [0, 1], wavelength: ""});
     const [now, setNow] = useState(Date.now());
     const [genderEl, setGenderEl] = useState(null);
     const [prefEl, setPrefEl] = useState(null);
@@ -52,7 +51,7 @@ function Lobby() {
         return ( 
             <div className='lobbyContainer'>
                 <p><FaHourglassHalf /> {now - tempDate}</p>
-                <p><FaUser /> {event.nUsers}</p>
+                <p><FaUsers /> {event.nUsers}</p>
                 
                 <GenderSlider user={user} setUser={setUser} anchorEl={genderEl} setAnchorEl={setGenderEl}/>
                 <LabelButton onClick={handleGenderPopover} text={getGenderLabel(user.gender)} />
@@ -60,7 +59,7 @@ function Lobby() {
                 <PreferenceSlider setUser={setUser} user={user} anchorEl={prefEl} setAnchorEl={setPrefEl}/>
                 <LabelButton onClick={handlePrefPopover} text={getPrefLabel(user.preference)} />
 
-                <WavelengthField user={user} setUser={setUser} />
+                <WavelengthField user={user} setUser={setUser}/>
                 <button onClick={handleReadyButton}>ready</button>
                 <button onClick={handleDebugToggleButton}> toggle pages [DEBUG] </button>
             </div>
