@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import { socket } from '../helpers/Websocket';
+import { makeCall } from '../helpers/WebRTC';
 
 function WsExample() {
 
@@ -7,7 +8,7 @@ function WsExample() {
 
     const onSubmit = (e) => {
         socket.send(values.content);
-        console.log("sending over ws: ", values)
+        console.log("making call: ", values)
         return;
     }
     

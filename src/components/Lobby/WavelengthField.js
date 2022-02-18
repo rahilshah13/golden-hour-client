@@ -47,7 +47,6 @@ function WavelengthField({user, setUser}) {
             <TextField
                 error={error === 'valid' ? false : true}
                 id="my-wavelength"
-                defaultValue="(😈*🥑)/🏋🏻"
                 helperText={getHelperText(error)}
                 variant="standard"
                 value={val}

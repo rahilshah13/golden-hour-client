@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import {updateCameraList, getConnectedDevices, playVideoFromCamera}  from '../helpers/WebRTC';
+import {updateCameraList, getConnectedDevices}  from '../helpers/WebRTC';
 import TinderCard from 'react-tinder-card'
 import VideoContainer from "./VideoContainer";
 import WsExample from "./WsExample";
@@ -11,18 +11,18 @@ function SwipePage() {
     const [lastDirection, setLastDirection] = useState()
     // used for outOfFrame closure
     const currentIndexRef = useRef(currentIndex)
-    
+
     const childRefs = useMemo(() => Array(db.length).fill(0).map((i) => React.createRef()),[])
     const updateCurrentIndex = (val) => {
         setCurrentIndex(val);
         currentIndexRef.current = val;
     }
 
-    const canSwipe = currentIndex >= 0;
+    // const canSwipe = currentIndex >= 0;
 
     const swiped = (direction, nameToDelete, index) => {
-        setLastDirection(direction)
-        updateCurrentIndex(index - 1)
+        setLastDirection(direction);
+        updateCurrentIndex(index - 1);
     }
 
     const outOfFrame = (name, idx) => {
@@ -34,16 +34,13 @@ function SwipePage() {
         // during latest swipes. Only the last outOfFrame event should be considered valid
     }
 
-    const swipe = async (dir) => {
-        if (canSwipe && currentIndex < db.length) {
-          await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
-        }
-    }
-
-    useEffect(async () => {
-        const videoCameras = await getConnectedDevices('videoinput');
-        console.log("video cam list updated")
-        updateCameraList(videoCameras);
+    useEffect(() => {
+        async function p() {
+            const videoCameras = await getConnectedDevices('videoinput');
+            console.log("video cam list updated");
+            updateCameraList(videoCameras);
+        };
+        p();
     }, []);
     
     // TODO: ONLY CALL PLAYVIDEO ONSWIPE
@@ -59,7 +56,7 @@ function SwipePage() {
                         onCardLeftScreen={() => outOfFrame(match, index)}
                     >   
                         <VideoContainer match={match}/>
-                        <WsExample /> 
+                        <WsExample />
                     </TinderCard>
                 )})
             }

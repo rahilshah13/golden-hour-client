@@ -2,6 +2,21 @@ import { socket } from './Websocket';
 
 const constraints = {'video': true, 'audio': true};
 const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
+const peerConnection = new RTCPeerConnection(configuration);
+
+socket.on("offer", async (message) => {
+    if(message.answer) {
+        console.log("answer recieved: ", message.answer);
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(message.answer));
+
+    } else if (message.offer) {
+        console.log("offer recieved")
+        peerConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+        socket.send("offer", {'answer': answer});
+    }
+});
 
 // Listen for changes to media devices and update the list accordingly
 navigator.mediaDevices.addEventListener('devicechange', event => {
@@ -16,7 +31,10 @@ function updateCameraList(cameras) {
         const cameraOption = document.createElement('option');
         cameraOption.label = camera.label;
         cameraOption.value = camera.deviceId;
-    }).forEach(cameraOption => listElement.add(cameraOption));
+        if (cameraOption) 
+            listElement.add(cameraOption)
+        return 0;
+    });
 }
 
 // Fetch an array of devices of a certain type
@@ -36,17 +54,18 @@ async function playVideoFromCamera(matchId) {
     }
 }
 
-async function makeCall() {
-    const peerConnection = new RTCPeerConnection(configuration);
+async function createOffer() {
+    console.log("offer sent!")
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
-    socket.send({'offer': offer});
-}
+    socket.emit("offer", {"offer": offer});
+};
 
 
 export {
     updateCameraList,
     getConnectedDevices,
     playVideoFromCamera,
-    makeCall
+    createOffer,
+    peerConnection,
 } 
