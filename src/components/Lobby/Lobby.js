@@ -12,10 +12,7 @@ import LabelButton from './LabelButton';
 const tempDate = Date.now()
 function handleReadyButton() {
     socket.emit("profile_update", "ligma");
-}
-
-function getTimeStr(s, c) {
-    var Date
+    createOffer();
 }
 
 function Lobby({user, setUser}) {
@@ -37,7 +34,9 @@ function Lobby({user, setUser}) {
     // TODO: make sure connection isn't being reset on re-render or refresh (?)
     useEffect(() => { 
         socket.connect();
-        createOffer();
+        // setInterval(() => {
+        //     setNow(Date.now());
+        // }, 1000);
     },[]);
 
     socket.on("connection", (res) => {
@@ -48,9 +47,6 @@ function Lobby({user, setUser}) {
         setEvent({...event, nUsers: n});
     });
 
-    setInterval(() => {
-        setNow(Date.now());
-    }, 1000);
 
     if(event.ready && user.ready)
             return ( 

@@ -1,17 +1,20 @@
 import React, { useEffect } from "react";
-import {playVideoFromCamera}  from '../helpers/WebRTC';
+import {playVideo }  from '../helpers/WebRTC';
+import WsExample from "./WsExample";
+import { createOffer } from '../helpers/WebRTC';
 
 function VideoContainer({match}) {
 
     useEffect(() => {
         console.log('greetings', match);
-        playVideoFromCamera(match)
+        playVideo(match);
     }, []);
 
     return (
         <div className="card">
             <h3>{match}</h3>
-            <video className="cardContent" id={`video-${match}`} autoPlay playsInline controls={false}/>
+            <video id={`remoteVideo-${match}`} style={{width:"100%", position: "absolute"}} autoPlay playsInline controls={false} />
+            <video id={`localVideo-${match}`} style={{width:"100%", position: "absolute", top: "50%"}} autoPlay playsInline controls={false}/>
         </div>
     );
 }

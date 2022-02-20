@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import {updateCameraList, getConnectedDevices}  from '../helpers/WebRTC';
 import TinderCard from 'react-tinder-card'
 import VideoContainer from "./VideoContainer";
 import WsExample from "./WsExample";
+import { createOffer } from '../helpers/WebRTC';
+
 const db = ["joemama", "ligmaballs", "poopmapants"];
 
 function SwipePage() {
@@ -33,15 +34,6 @@ function SwipePage() {
         // it happens multiple outOfFrame events are queued and the card disappear
         // during latest swipes. Only the last outOfFrame event should be considered valid
     }
-
-    useEffect(() => {
-        async function p() {
-            const videoCameras = await getConnectedDevices('videoinput');
-            console.log("video cam list updated");
-            updateCameraList(videoCameras);
-        };
-        p();
-    }, []);
     
     // TODO: ONLY CALL PLAYVIDEO ONSWIPE
     return (
@@ -56,10 +48,10 @@ function SwipePage() {
                         onCardLeftScreen={() => outOfFrame(match, index)}
                     >   
                         <VideoContainer match={match}/>
-                        <WsExample />
                     </TinderCard>
                 )})
             }
+            <button id={`button`} style={{position: "absolute", top: "80%"}} onClick={createOffer}>CONNECT</button>
         </div>
     );
 }

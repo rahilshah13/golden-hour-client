@@ -1,58 +1,12 @@
 import { socket } from './Websocket';
-
 const constraints = {'video': true, 'audio': true};
-const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
+const configuration = {'iceServers': [{'urls': ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302']}]}
 const peerConnection = new RTCPeerConnection(configuration);
 
-socket.on("offer", async (message) => {
-    if(message.answer) {
-        console.log("answer recieved: ", message.answer);
-        await peerConnection.setRemoteDescription(new RTCSessionDescription(message.answer));
-
-    } else if (message.offer) {
-        console.log("offer recieved")
-        peerConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
-        const answer = await peerConnection.createAnswer();
-        await peerConnection.setLocalDescription(answer);
-        socket.send("offer", {'answer': answer});
-    }
-});
-
-// Listen for changes to media devices and update the list accordingly
-navigator.mediaDevices.addEventListener('devicechange', event => {
-    const newCameraList = getConnectedDevices('video');
-    updateCameraList(newCameraList);
-});
-
-// Updates the select element with the provided set of cameras
-function updateCameraList(cameras) {
-    const listElement = document.querySelector('select#availableCameras');
-    cameras.map(camera => {
-        const cameraOption = document.createElement('option');
-        cameraOption.label = camera.label;
-        cameraOption.value = camera.deviceId;
-        if (cameraOption) 
-            listElement.add(cameraOption)
-        return 0;
-    });
-}
-
-// Fetch an array of devices of a certain type
-async function getConnectedDevices(type) {
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    return devices.filter(device => device.kind === type)
-}
-
-async function playVideoFromCamera(matchId) {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        const videoElement = document.getElementById(`video-${matchId}`);
-        videoElement.srcObject = stream;
-    } catch(error) {
-        // TODO: HANDLE NO video camera or mic found
-        console.error('Error opening video camera.', error);
-    }
-}
+let remoteStream = null; 
+let localStream = null;
+let localVideo = null;
+let remoteVideo = null;
 
 async function createOffer() {
     console.log("offer sent!")
@@ -61,11 +15,79 @@ async function createOffer() {
     socket.emit("offer", {"offer": offer});
 };
 
+socket.on("offer", async (message) => {
+    if(message.answer) {
+        console.log("answer recieved: ", message.answer);
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(message.answer));
+    } else if (message.offer) {
+        console.log("offer recieved")
+        peerConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+        socket.emit("offer", {'answer': answer});
+    }
+});
+peerConnection.onicecandidate = e => {
+    if (e.candidate) {
+        console.log("sent ice candidate.");
+        socket.emit('new_ice_candidate', e.candidate);
+    }
+};
+
+// Listen for remote ICE candidates and add them to the local RTCPeerConnection
+socket.on('remote_ice_candidate', async candidate => {
+    if (candidate) {
+        try {
+            console.log("added remote ice candidate.");
+            await peerConnection.addIceCandidate(candidate);
+        } catch (e) {
+            console.error('Error adding received ice candidate', e);
+        }
+    }
+});
+
+peerConnection.onconnectionstatechange = e => {
+    if (peerConnection.connectionState === 'connected') {
+        console.log("peers connected!!+*");
+    }
+};
+
+
+
+// Fetch an array of devices of a certain type
+async function getConnectedDevices(type) {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    return devices.filter(device => device.kind === type)
+}
+////////////////////////////
+async function playVideo(match) {
+    try {
+        localStream = await navigator.mediaDevices.getUserMedia(constraints);
+        remoteStream = new MediaStream();
+
+        localStream.getTracks().forEach((t) => {
+            peerConnection.addTrack(t, localStream);
+        });
+
+        peerConnection.ontrack = event => {
+            console.log("remote stream adding track!!");
+            remoteVideo.srcObject = event.streams[0];
+        };
+
+        localVideo = document.getElementById(`localVideo-${match}`);
+        remoteVideo = document.getElementById(`remoteVideo-${match}`);
+        localVideo.srcObject = localStream;
+        remoteVideo.srcObject = remoteStream;
+
+    } catch(e) { console.error('Error opening video camera.', e) }
+}
+
+/////////////////////////////
+
 
 export {
-    updateCameraList,
     getConnectedDevices,
-    playVideoFromCamera,
     createOffer,
+    playVideo,
     peerConnection,
 } 
