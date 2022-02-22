@@ -9,7 +9,7 @@ function GoogleAuth({userState, setUser, setAuth}) {
 
     //TODO: TEST REQ NOT WORKING FLOW
     async function onSuccess(user, setAuth) {
-        fetch("http://localhost:5000/api/auth/login", {
+        fetch(process.env.REACT_APP_API_URL || "http://localhost:5000/api/auth/login", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
