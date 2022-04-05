@@ -27,6 +27,7 @@ socket.on("offer", async (message) => {
         socket.emit("offer", {'answer': answer});
     }
 });
+
 peerConnection.onicecandidate = e => {
     if (e.candidate) {
         console.log("sent ice candidate.");
@@ -53,29 +54,30 @@ peerConnection.onconnectionstatechange = e => {
 };
 
 
-
 // Fetch an array of devices of a certain type
 async function getConnectedDevices(type) {
     const devices = await navigator.mediaDevices.enumerateDevices();
     return devices.filter(device => device.kind === type)
 }
+
 ////////////////////////////
 async function playVideo(match) {
     try {
         localStream = await navigator.mediaDevices.getUserMedia(constraints);
         remoteStream = new MediaStream();
+        localVideo = document.getElementById(`localVideo-${match}`);
+        remoteVideo = document.getElementById(`remoteVideo-${match}`);
 
         localStream.getTracks().forEach((t) => {
             peerConnection.addTrack(t, localStream);
         });
 
         peerConnection.ontrack = event => {
-            console.log("remote stream adding track!!");
+            console.log("peerConnection ontrack: ", event);
             remoteVideo.srcObject = event.streams[0];
         };
 
-        localVideo = document.getElementById(`localVideo-${match}`);
-        remoteVideo = document.getElementById(`remoteVideo-${match}`);
+
         localVideo.srcObject = localStream;
         remoteVideo.srcObject = remoteStream;
 

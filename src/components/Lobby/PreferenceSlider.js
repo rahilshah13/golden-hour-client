@@ -60,10 +60,10 @@ function PreferenceSlider({user, setUser, anchorEl, setAnchorEl}) {
             onClose={handleClose}
         >   
             <Slider
-                    sx={{ width: "80vw", marginTop: "3.5vh", background: "rgba(0,0,0,0.0)"}}
+                    sx={{ width: "80vw", background: "rgba(0,0,0,0.0)"}}
                     getAriaLabel={() => 'Minimum distance shift'}
-                    min={0}
-                    max={1}
+                    min={0.0}
+                    max={1.0}
                     step={.01}
                     value={user.preference}
                     onChange={handleChange}

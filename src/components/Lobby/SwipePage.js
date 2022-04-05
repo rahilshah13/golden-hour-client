@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import TinderCard from 'react-tinder-card'
 import VideoContainer from "./VideoContainer";
-import WsExample from "./WsExample";
-import { createOffer } from '../helpers/WebRTC';
+import WsExample from "../WsExample";
+import { createOffer } from '../../helpers/WebRTC';
 
 const db = ["joemama", "ligmaballs", "poopmapants"];
 

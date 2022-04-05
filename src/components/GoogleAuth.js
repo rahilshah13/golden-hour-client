@@ -4,7 +4,6 @@ import GoogleLogin from 'react-google-login';
 import "../styles/home.css";
 
 
-
 function GoogleAuth({userState, setUser, setAuth}) {
 
     //TODO: TEST REQ NOT WORKING FLOW
@@ -35,7 +34,7 @@ function GoogleAuth({userState, setUser, setAuth}) {
                 onFailure={(user) => console.log("TODO: oAuth failure", user)}
                 cookiePolicy={'single_host_origin'}
                 redirectUri="localhost:3000/"
-                hostedDomain="vt.edu"
+                // hostedDomain="vt.edu"
                 uxMode="popup"
             />
         </div>

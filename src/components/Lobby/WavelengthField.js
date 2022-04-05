@@ -39,7 +39,7 @@ function WavelengthField({user, setUser}) {
         setError(validateInput(event.target.value));
         setVal(event.target.value);
         if(error === 'too_long') setVal(event.target.value.slice(0, 20));
-        if(error === 'valid') setUser({...user, "wavelength": val});
+        if(error === 'valid') setUser({...user, "wavelength": event.target.value});
     };
 
     return (

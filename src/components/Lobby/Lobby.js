@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import SwipePage from '../SwipePage';
+import SwipePage from './SwipePage';
 import { socket } from '../../helpers/Websocket';
 import { createOffer } from '../../helpers/WebRTC';
 import { FaHourglassHalf, FaUsers } from "react-icons/fa";
@@ -10,10 +10,7 @@ import '../../styles/lobby.css';
 import LabelButton from './LabelButton';
 
 const tempDate = Date.now()
-function handleReadyButton() {
-    socket.emit("profile_update", "ligma");
-    createOffer();
-}
+
 
 function Lobby({user, setUser}) {
     // not_started, started
@@ -21,7 +18,12 @@ function Lobby({user, setUser}) {
     const [now, setNow] = useState(Date.now());
     const [genderEl, setGenderEl] = useState(null);
     const [prefEl, setPrefEl] = useState(null);
-
+    
+    function handleReadyButton() {
+        console.log("send profile update & ready");
+        socket.emit("profile_update", user);
+    }
+    
     const handleDebugToggleButton = (e) => {
         setUser({...user, ready: !user.ready});
         setEvent({...event, ready: !event.ready});
@@ -69,10 +71,10 @@ function Lobby({user, setUser}) {
                 <PreferenceSlider setUser={setUser} user={user} anchorEl={prefEl} setAnchorEl={setPrefEl}/>
                 <LabelButton onClick={handlePrefPopover} text={getPrefLabel(user.preference)} val={user.preference} mode="p" />
                 <WavelengthField user={user} setUser={setUser}/>
-                <div style={{margin: "5%"}}>
+                <div>
                     <button onClick={handleReadyButton}>ready</button>
                 </div>
-                <div style={{margin: "5%"}}>
+                <div>
                     <button onClick={handleDebugToggleButton}> toggle pages [DEBUG] </button>
                 </div>
             </div>
