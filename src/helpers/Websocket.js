@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 const socket = new io(process.env.REACT_APP_WS_SERVER_URL || 'ws://localhost:4000/socket.io/', { 
     auth: {token: localStorage.getItem("token")}, 
     autoConnect: false,
-    transports: ['websocket'],
+    // transports: ['websocket'],
 });
 
 socket.on("event_state", (state) => {
