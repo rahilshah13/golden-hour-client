@@ -11,14 +11,15 @@ const addBox = {marginTop: "10%"}
 
 // hardcoded for demo purposes only
 const blackList = ["bobligma@vt.edu", "sumodeeznuts@vt.edu", "carlsigma@vt.edu", "sigmabulls@vt.edu"];
-const currentAdmins = ["rahil@vt.edu", "scdrake19@vt.edu", "aribali3@vt.edu"];
+
+// const currentAdmins = ["rahil@vt.edu", "scdrake19@vt.edu", "aribali3@vt.edu"];
 
 // lol the state management here is so bad and lazy
 function AdminPanel({userState, setUser, setAuth}) {
 
     const [isAdmin, setIsAdmin] = useState(false);
     const [appData, setAppData] = useState({"users": {"n":0,"avg_age":0,"avg_gender":0},"events":{"n":0},"interactions":{"n":0,"nl":0,"nr":0,"avg_dl":0,"avg_rl":0}});
-    const [admins, setAdmins] = useState(currentAdmins);
+    const [admins, setAdmins] = useState([]);
     const [bl, setBl] = useState(blackList);
     const [a, setA] = useState("");
     const [b, setB] = useState("");
@@ -37,6 +38,7 @@ function AdminPanel({userState, setUser, setAuth}) {
                     setIsAdmin(true);
                     let data = await res.json();
                     setAppData(data);
+                    setAdmins(data.admins.map(x => x.email));
                     console.log(data);
                 }
                     
@@ -48,10 +50,38 @@ function AdminPanel({userState, setUser, setAuth}) {
         }, []
     );
 
-    const a_onsubmit = (e) => {
-        let newAdmins = admins;
-        newAdmins.push(a);
-        setAdmins(newAdmins);
+    const a_add_onsubmit = async (e) => {
+        let token = localStorage.getItem("token");
+        if (!token)
+          return false;
+
+        fetch('http://localhost:5000/api/admin/add', {
+            method: "POST", 
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`} , 
+            body: JSON.stringify({"admin": a})
+        }).then(async (res) => {
+            let data = await res.json();
+            console.log(data.admins)
+            setAdmins(data.admins.map(x => x.email));
+        });
+        setA("");
+    };
+
+    const a_delete_onsubmit = async (e) => {
+        let token = localStorage.getItem("token");
+        if (!token)
+          return false;
+
+        fetch('http://localhost:5000/api/admin/delete', {method: "POST", headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`} , body: JSON.stringify({"admin": a})})
+        .then(async (res) => {
+            if (res.status === 200) {
+                let data = await res.json();
+                console.log(data.admins);
+                setAdmins(data.admins.map(x => x.email));
+            } else {
+                console.log("can't delete not existant admin");
+            }
+        });
         setA("");
     };
 
@@ -104,7 +134,10 @@ function AdminPanel({userState, setUser, setAuth}) {
                         <div style={col}>
                             <span style={addBox}>
                                 <input type="text" value={a} onChange={onChangeA}></input>
-                                <button onClick={a_onsubmit}>add admin</button>
+                                <span>
+                                    <button onClick={a_add_onsubmit}>add admin</button>
+                                    <button onClick={a_delete_onsubmit}>delete admin</button>
+                                </span>
                             </span>
                         </div>
                         <div style={col}>
