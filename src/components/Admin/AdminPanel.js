@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const container = {width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"};
 const col_container = {width: "100%", display: "flex", flexDirection: "row", margin: "1vw", marginLeft: "5%"};
 const col = {width: "100%", display: "flex", alignItems: "left", flexDirection: "column", marginLeft: "1vw", marginRight: "1vw"};
-const addBox = {marginTop: "10%"}
+const addBox = {marginTop: "5%"}
 
 
 // hardcoded for demo purposes only
@@ -20,6 +20,7 @@ function AdminPanel({userState, setUser, setAuth}) {
     const [isAdmin, setIsAdmin] = useState(false);
     const [appData, setAppData] = useState({"users": {"n":0,"avg_age":0,"avg_gender":0},"events":{"n":0},"interactions":{"n":0,"nl":0,"nr":0,"avg_dl":0,"avg_rl":0}});
     const [admins, setAdmins] = useState([]);
+    const [outcomes, setOutcomes] = useState([]);
     const [bl, setBl] = useState(blackList);
     const [a, setA] = useState("");
     const [b, setB] = useState("");
@@ -38,6 +39,7 @@ function AdminPanel({userState, setUser, setAuth}) {
                     setIsAdmin(true);
                     let data = await res.json();
                     setAppData(data);
+                    setOutcomes(data.outcomes);
                     setAdmins(data.admins.map(x => x.email));
                     console.log(data);
                 }
@@ -146,6 +148,14 @@ function AdminPanel({userState, setUser, setAuth}) {
                                 <button onClick={b_onsubmit}>blacklist user</button>
                             </span>
                         </div>
+                </div>
+                <div style={col_container}>
+                    <div style={col}>
+                        <h3>Outcomes</h3>
+                        {outcomes.map((o, index) => {
+                            return <li key={index}> {`${o.participant_1_email} --> ${o.participant_2_email}: ${o.outcome}, ${parseFloat(o.duration).toFixed(3)} mins`} </li>
+                        })}
+                    </div>
                 </div> 
             </div>
         : 
